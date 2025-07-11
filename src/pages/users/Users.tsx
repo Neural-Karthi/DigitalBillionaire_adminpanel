@@ -21,10 +21,10 @@ export const Users: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900">Users</h1>
           <p className="text-gray-600 mt-1">Manage customer accounts and permissions</p>
         </div>
-        <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+        {/* <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
           <UserPlus className="w-4 h-4 mr-2" />
           Add User
-        </Button>
+        </Button> */}
       </motion.div>
 
       <motion.div

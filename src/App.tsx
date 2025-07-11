@@ -17,6 +17,10 @@ import { Coupons } from "@/pages/coupons/Coupons";
 import { Notifications } from "@/pages/Notifications";
 import NotFound from "./pages/NotFound";
 import Index from "./pages/products/index";
+import Kycpage from './pages/Kyc/KycIndex';
+import Freelanceindex from './pages/FreelanceHub/Freelanceindex'
+import ContactUs from "./pages/contactus/contactus";
+import Jobindex from "./pages/JobApplied/Jobindex";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +47,10 @@ const App = () => (
                 <Route index element={<Navigate to="/dashboard" replace />} />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="products" element={<Index />} />
+                <Route path="Kyc" element={<Kycpage />} />
+                <Route path="Freelance_Hub" element={<Freelanceindex />} />
+                <Route path="ContactUs" element={<ContactUs />} />
+                <Route path="Job_Applied" element={<Jobindex />} />
                 <Route path="orders" element={<Orders />} />
                 <Route path="users" element={<Users />} />
                 <Route path="coupons" element={<Coupons />} />

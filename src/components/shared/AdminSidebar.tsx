@@ -23,16 +23,19 @@ interface AdminSidebarProps {
   onToggle: () => void;
 }
 
+// { name: 'Payment', href: '/products', icon: Package },
+// { name: 'Coupons', href: '/coupons', icon: Tag  },
+// { name: 'Webinars', href: '/Webinars', icon: Radio },
+
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Users', href: '/users', icon: Users },
-  { name: 'Payment', href: '/products', icon: Package },
   { name: 'KYC Pendings', href: '/Kyc', icon: BadgeAlert },
-  { name: 'Coupons', href: '/coupons', icon: Tag  },
+  
   { name: 'Contact Us', href: '/Contactus', icon: Headset },
-  { name: 'Freelance Hub', href: '/Kyc', icon:ContactRound  },
-  { name: 'Job Applied', href: '/Kyc', icon: BriefcaseBusiness },
-  { name: 'Webinars', href: '/Kyc', icon: Radio },
+  { name: 'Freelance Hub', href: '/Freelance_Hub', icon:ContactRound  },
+  { name: 'Job Applied', href: '/Job_Applied', icon: BriefcaseBusiness },
+  
 ];
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle }) => {
