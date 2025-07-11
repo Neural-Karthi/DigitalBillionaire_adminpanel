@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
-
+import { API_BASE_URL } from "@/lib/api";
 const PAGE_SIZE = 10;
 
 interface JobApplication {
@@ -44,7 +44,7 @@ const JobAppliedList: React.FC = () => {
         params.append("reply_status", replyStatus);
       }
 
-      const res = await fetch(`http://localhost:8000/api/Admin/GetJobappliedlist?${params.toString()}`);
+      const res = await fetch(`${API_BASE_URL}/api/Admin/GetJobappliedlist?${params.toString()}`);
       const data = await res.json();
       setApplications(data.results || []);
       setTotal(data.total || 0);

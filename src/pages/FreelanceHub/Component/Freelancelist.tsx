@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react"; // Spinner icon
-
+import { API_BASE_URL } from "@/lib/api";
 const PAGE_SIZE = 10;
 
 interface FreelanceApplication {
@@ -44,7 +44,7 @@ const FreelanceApplicationsList: React.FC = () => {
       }
 
       const res = await fetch(
-        `http://localhost:8000/api/Admin/GetFreelanceList?${params.toString()}`
+        `${API_BASE_URL}/api/Admin/GetFreelanceList?${params.toString()}`
       );
       const data = await res.json();
       setApplications(data.results || []);

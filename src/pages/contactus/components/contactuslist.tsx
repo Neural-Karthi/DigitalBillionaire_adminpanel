@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
-
+import { API_BASE_URL } from "@/lib/api";
 const PAGE_SIZE = 10;
 
 interface ContactInquiry {
@@ -49,7 +49,7 @@ const Contactuslist: React.FC = () => {
       }
 
       const res = await fetch(
-        `http://localhost:8000/api/Admin/GetContactuslist?${params.toString()}`
+        `${API_BASE_URL}/api/Admin/GetContactuslist?${params.toString()}`
       );
       const data = await res.json();
       setInquiries(data.results || []);

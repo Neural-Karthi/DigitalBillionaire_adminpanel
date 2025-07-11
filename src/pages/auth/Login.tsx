@@ -74,7 +74,7 @@ export const Login: React.FC = () => {
       await login(email, password);
       toast({
         title: "Login successful",
-        description: "Welcome back to PK Trends Admin!",
+        description: "Welcome back to Digitalbillionaire Admin!",
       });
     } catch (error: any) {
       // Error is already set in the context, so we don't need to show toast here

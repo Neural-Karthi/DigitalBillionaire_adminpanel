@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "@/lib/api";
 import {
   Select,
   SelectContent,
@@ -63,7 +64,7 @@ const KycLists: React.FC = () => {
     });
 
     const res = await fetch(
-      `http://localhost:8000/api/Admin/Kycpending?${params.toString()}`
+      `${API_BASE_URL}/api/Admin/Kycpending?${params.toString()}`
     );
     const data = await res.json();
     setKycData(data.results);
@@ -79,7 +80,7 @@ const KycLists: React.FC = () => {
     if (!pendingDeleteId) return;
 
     const res = await fetch(
-      `http://localhost:8000/api/Admin/Kycpending/${pendingDeleteId}`,
+      `${API_BASE_URL}/api/Admin/Kycpending/${pendingDeleteId}`,
       {
         method: "DELETE",
         headers: {
@@ -121,7 +122,7 @@ const KycLists: React.FC = () => {
 
 
       const handleApprove = async (id: string) => {
-  const res = await fetch(`http://localhost:8000/api/Admin/Kycpending/${id}/verify`, {
+  const res = await fetch(`${API_BASE_URL}/api/Admin/Kycpending/${id}/verify`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -141,7 +142,7 @@ const KycLists: React.FC = () => {
 };
 
 const handleReject = async (id: string) => {
-  const res = await fetch(`http://localhost:8000/api/Admin/Kycpending/${id}/reject`, {
+  const res = await fetch(`${API_BASE_URL}/api/Admin/Kycpending/${id}/reject`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${getToken()}`,
