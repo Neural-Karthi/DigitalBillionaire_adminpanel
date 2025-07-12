@@ -10,7 +10,7 @@ export const Users: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 cursor-pointer">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
