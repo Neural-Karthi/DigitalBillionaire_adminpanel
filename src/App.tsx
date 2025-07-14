@@ -21,6 +21,7 @@ import Kycpage from './pages/Kyc/KycIndex';
 import Freelanceindex from './pages/FreelanceHub/Freelanceindex'
 import ContactUs from "./pages/contactus/contactus";
 import Jobindex from "./pages/JobApplied/Jobindex";
+import PaymentEnrollIndex from './pages/PaymentEnroll/PaymentEnrollIndex';
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
                 <Route path="users" element={<Users />} />
                 <Route path="coupons" element={<Coupons />} />
                 <Route path="notifications" element={<Notifications />} />
+                <Route path="Payment_enroll" element={<PaymentEnrollIndex />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

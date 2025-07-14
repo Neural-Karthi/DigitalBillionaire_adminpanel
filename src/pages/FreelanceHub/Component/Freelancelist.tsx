@@ -3,9 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2 } from "lucide-react"; // Spinner icon
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+
 const PAGE_SIZE = 10;
 
 interface FreelanceApplication {
@@ -16,6 +23,7 @@ interface FreelanceApplication {
   role: string;
   message: string;
   reply_status: string;
+  resume_url?: string;
   created_at: string;
 }
 
@@ -134,6 +142,7 @@ const FreelanceApplicationsList: React.FC = () => {
                   <th className="px-4 py-3 border">Role</th>
                   <th className="px-4 py-3 border">Message</th>
                   <th className="px-4 py-3 border">Reply Status</th>
+                  <th className="px-4 py-3 border">Resume</th>
                   <th className="px-4 py-3 border">Submitted At</th>
                 </tr>
               </thead>
@@ -148,8 +157,26 @@ const FreelanceApplicationsList: React.FC = () => {
                     <td className="px-4 py-3 border">{app.phone_number}</td>
                     <td className="px-4 py-3 border capitalize">{app.role}</td>
                     <td className="px-4 py-3 border">{app.message}</td>
-                    <td className="px-4 py-3 border capitalize">{app.reply_status}</td>
-                    <td className="px-4 py-3 border">{formatDate(app.created_at)}</td>
+                    <td className="px-4 py-3 border capitalize">
+                      {app.reply_status}
+                    </td>
+                    <td className="px-4 py-3 border">
+                      {app.resume_url ? (
+                        <a
+                          href={app.resume_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline"
+                        >
+                          View Resume
+                        </a>
+                      ) : (
+                        <span className="text-gray-400 italic">No Resume</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 border">
+                      {formatDate(app.created_at)}
+                    </td>
                   </tr>
                 ))}
               </tbody>

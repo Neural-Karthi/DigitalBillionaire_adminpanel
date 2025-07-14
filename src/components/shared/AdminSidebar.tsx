@@ -13,7 +13,8 @@ import {
   Headset,
   Menu,
   LogOut,
-  Radio
+  Radio,
+  IndianRupee
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -30,11 +31,11 @@ interface AdminSidebarProps {
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Users', href: '/users', icon: Users },
-  { name: 'KYC Pendings', href: '/Kyc', icon: BadgeAlert },
-  
+  { name: 'KYC Pendings', href: '/Kyc', icon: BadgeAlert }, 
   { name: 'Contact Us', href: '/Contactus', icon: Headset },
   { name: 'Freelance Hub', href: '/Freelance_Hub', icon:ContactRound  },
   { name: 'Job Applied', href: '/Job_Applied', icon: BriefcaseBusiness },
+  { name: 'Payment Enroll', href: '/Payment_enroll', icon: IndianRupee },
   
 ];
 

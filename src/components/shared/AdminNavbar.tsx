@@ -47,7 +47,7 @@ export const AdminNavbar: React.FC = () => {
               </span>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+              <p className="text-sm font-medium text-gray-900">Digitalbillionaireofficiall</p>
               <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
             </div>
           </div>
