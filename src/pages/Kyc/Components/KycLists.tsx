@@ -21,6 +21,14 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 interface CustomerBankDetail {
   id: string;
@@ -33,9 +41,10 @@ interface CustomerBankDetail {
   created_at: string;
   modified_at: string;
   customer_bank_images: string;
+  account_verification_note: string;
   customer_pan_card_image: string;
   aadhaar_card_number: string;
-  account_verification_status: "verified" | "pending" | "rejected" | boolean;
+  account_verification_status: boolean;
 }
 
 const PAGE_SIZE = 10;
@@ -49,6 +58,10 @@ const KycLists: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [rejectNoteDialogOpen, setRejectNoteDialogOpen] = useState(false);
+  const [rejectNote, setRejectNote] = useState("");
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
+  const [isSubmittingReject, setIsSubmittingReject] = useState(false);
   const { toast } = useToast();
 
   const pageCount = Math.ceil(total / PAGE_SIZE);
@@ -104,6 +117,50 @@ const KycLists: React.FC = () => {
     }
   };
 
+  const handleRejectSubmit = async () => {
+    if (!rejectingId) return;
+
+    setIsSubmittingReject(true);
+    const res = await fetch(`${API_BASE_URL}/api/Admin/Kycpending/${rejectingId}/reject`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({ note: rejectNote }),
+    });
+
+    setIsSubmittingReject(false);
+    setRejectNoteDialogOpen(false);
+    setRejectNote("");
+    setRejectingId(null);
+
+    if (res.ok) {
+      toast({ title: "KYC rejected" });
+      fetchKycData();
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to reject",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleApprove = async (id: string) => {
+    const res = await fetch(`${API_BASE_URL}/api/Admin/Kycpending/${id}/verify`, {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${getToken()}` },
+    });
+
+    if (res.ok) {
+      toast({ title: "KYC approved" });
+      fetchKycData();
+    } else {
+      toast({ title: "Error", description: "Failed to approve", variant: "destructive" });
+    }
+  };
+
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
   const handleNext = () => setPage((p) => Math.min(pageCount, p + 1));
 
@@ -118,49 +175,6 @@ const KycLists: React.FC = () => {
           hour12: true,
         })
       : "-";
-
-
-
-      const handleApprove = async (id: string) => {
-  const res = await fetch(`${API_BASE_URL}/api/Admin/Kycpending/${id}/verify`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
-  });
-
-  if (res.ok) {
-    toast({ title: "KYC approved" });
-    fetchKycData();
-  } else {
-    toast({
-      title: "Error",
-      description: "Failed to approve",
-      variant: "destructive",
-    });
-  }
-};
-
-const handleReject = async (id: string) => {
-  const res = await fetch(`${API_BASE_URL}/api/Admin/Kycpending/${id}/reject`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
-  });
-
-  if (res.ok) {
-    toast({ title: "KYC rejected" });
-    fetchKycData();
-  } else {
-    toast({
-      title: "Error",
-      description: "Failed to reject",
-      variant: "destructive",
-    });
-  }
-};
-
 
   return (
     <motion.div
@@ -184,8 +198,8 @@ const handleReject = async (id: string) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="rejected">Rejected</SelectItem>
               <SelectItem value="verified">Verified</SelectItem>
-              <SelectItem value="all">All</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -200,83 +214,49 @@ const handleReject = async (id: string) => {
               <tr>
                 <th className="px-4 py-3 border">Guide Code</th>
                 <th className="px-4 py-3 border">Full Name</th>
-                <th className="px-4 py-3 border">Account Type</th>
                 <th className="px-4 py-3 border">Bank</th>
                 <th className="px-4 py-3 border">Account No.</th>
-                <th className="px-4 py-3 border">IFSC</th>
                 <th className="px-4 py-3 border">Aadhaar</th>
                 <th className="px-4 py-3 border">PAN</th>
                 <th className="px-4 py-3 border">Bank Image</th>
+                <th className="px-4 py-3 border">Note</th>
                 <th className="px-4 py-3 border">Status</th>
                 <th className="px-4 py-3 border">Created</th>
                 <th className="px-4 py-3 border">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {kycData?.map((data, index) => (
-                <tr
-                  key={data.id}
-                  className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                > <td className="px-4 py-3 border">{data.guide_code}</td>
+              {kycData?.map((data) => (
+                <tr key={data.id}>
+                  <td className="px-4 py-3 border">{data.guide_code}</td>
                   <td className="px-4 py-3 border">{data.full_name}</td>
-                  <td className="px-4 py-3 border">{data.account_type}</td>
                   <td className="px-4 py-3 border">{data.bank_name}</td>
                   <td className="px-4 py-3 border">{data.account_number}</td>
-                  <td className="px-4 py-3 border">{data.ifsc_code}</td>
                   <td className="px-4 py-3 border">{data.aadhaar_card_number}</td>
                   <td className="px-4 py-3 border">
-                    <a
-                      href={data.customer_pan_card_image}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      View
-                    </a>
+                    <a href={data.customer_pan_card_image} target="_blank" rel="noreferrer" className="text-blue-600 underline">View</a>
                   </td>
                   <td className="px-4 py-3 border">
-                    <a
-                      href={data.customer_bank_images}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      View
-                    </a>
+                    <a href={data.customer_bank_images} target="_blank" rel="noreferrer" className="text-blue-600 underline">View</a>
                   </td>
+                  <td className="px-4 py-3 border">{data.account_verification_note}</td>
                   <td className="px-4 py-3 border space-y-2 flex flex-col">
-  <Button
-    size="sm"
-    variant="default"
-    onClick={() => handleApprove(data.id)}
-    disabled={data.account_verification_status === true}
-  >
-    Approve
-  </Button>
-  <Button
-    size="sm"
-    variant="outline"
-    onClick={() => handleReject(data.id)}
-    disabled={data.account_verification_status === false}
-  >
-    Reject
-  </Button>
-</td>
-
+                    {(statusFilter === "pending" || statusFilter === "rejected") && (
+                      <Button size="sm" onClick={() => handleApprove(data.id)}>Approve</Button>
+                    )}
+                    {(statusFilter === "pending" || statusFilter === "verified") && (
+                      <Button size="sm" variant="outline" onClick={() => {
+                        setRejectNoteDialogOpen(true);
+                        setRejectingId(data.id);
+                      }}>Reject</Button>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 border">{formatDate(data.created_at)}</td>
                   <td className="px-4 py-3 border">
-                    {formatDate(data.created_at)}
-                  </td>
-                  <td className="px-4 py-3 border space-y-2 flex flex-col">
-                   <Button
-    size="sm"
-    variant="destructive"
-    onClick={() => {
-      setPendingDeleteId(data.id);
-      setDeleteDialogOpen(true);
-    }}
-  >
-    Delete
-  </Button>
+                    <Button size="sm" variant="destructive" onClick={() => {
+                      setPendingDeleteId(data.id);
+                      setDeleteDialogOpen(true);
+                    }}>Delete</Button>
                   </td>
                 </tr>
               ))}
@@ -286,38 +266,42 @@ const handleReject = async (id: string) => {
       )}
 
       <div className="flex justify-center items-center gap-4 mt-6">
-        <Button onClick={handlePrev} disabled={page === 1} variant="outline">
-          Prev
-        </Button>
-        <span>
-          Page {page} of {pageCount || 1}
-        </span>
-        <Button
-          onClick={handleNext}
-          disabled={page === pageCount || pageCount === 0}
-          variant="outline"
-        >
-          Next
-        </Button>
+        <Button onClick={handlePrev} disabled={page === 1} variant="outline">Prev</Button>
+        <span>Page {page} of {pageCount || 1}</span>
+        <Button onClick={handleNext} disabled={page === pageCount || pageCount === 0} variant="outline">Next</Button>
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Record</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this KYC record? This action
-              cannot be undone.
-            </AlertDialogDescription>
+            <AlertDialogDescription>Are you sure you want to delete this KYC record? This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setPendingDeleteId(null)}>
-              Cancel
-            </AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setPendingDeleteId(null)}>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={rejectNoteDialogOpen} onOpenChange={setRejectNoteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject KYC</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            value={rejectNote}
+            onChange={(e) => setRejectNote(e.target.value)}
+            placeholder="Enter rejection note"
+          />
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setRejectNoteDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleRejectSubmit} disabled={isSubmittingReject}>
+              {isSubmittingReject ? "Submitting..." : "Submit"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 };
