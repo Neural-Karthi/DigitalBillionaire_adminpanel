@@ -68,6 +68,34 @@ const FreelanceApplicationsList: React.FC = () => {
     }
   };
 
+  const updateReplyStatus = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/api/Admin/GetFreelanceList/update-status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, reply_status: newStatus }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to update status");
+
+      toast({
+        title: "Success",
+        description: "Reply status updated successfully.",
+      });
+
+      fetchApplications(); // Refresh data
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to update reply status.",
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
     fetchApplications();
   }, [search, page, replyStatus]);
@@ -158,7 +186,20 @@ const FreelanceApplicationsList: React.FC = () => {
                     <td className="px-4 py-3 border capitalize">{app.role}</td>
                     <td className="px-4 py-3 border">{app.message}</td>
                     <td className="px-4 py-3 border capitalize">
-                      {app.reply_status}
+                      <Select
+                        value={app.reply_status}
+                        onValueChange={(val) =>
+                          updateReplyStatus(app.id, val)
+                        }
+                      >
+                        <SelectTrigger className="w-[100px] h-9">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="replied">Replied</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </td>
                     <td className="px-4 py-3 border">
                       {app.resume_url ? (

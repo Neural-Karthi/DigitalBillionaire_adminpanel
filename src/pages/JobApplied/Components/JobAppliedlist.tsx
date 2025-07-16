@@ -3,9 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
+
 const PAGE_SIZE = 10;
 
 interface JobApplication {
@@ -44,7 +51,9 @@ const JobAppliedList: React.FC = () => {
         params.append("reply_status", replyStatus);
       }
 
-      const res = await fetch(`${API_BASE_URL}/api/Admin/GetJobappliedlist?${params.toString()}`);
+      const res = await fetch(
+        `${API_BASE_URL}/api/Admin/GetJobappliedlist?${params.toString()}`
+      );
       const data = await res.json();
       setApplications(data.results || []);
       setTotal(data.total || 0);
@@ -56,6 +65,34 @@ const JobAppliedList: React.FC = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateReplyStatus = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/api/Admin/GetJobappliedlist/update-status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, reply_status: newStatus }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to update status");
+
+      toast({
+        title: "Success",
+        description: "Reply status updated successfully.",
+      });
+
+      fetchApplications();
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to update reply status.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -149,11 +186,31 @@ const JobAppliedList: React.FC = () => {
                     <td className="px-4 py-3 border">{app.department}</td>
                     <td className="px-4 py-3 border">{app.message}</td>
                     <td className="px-4 py-3 border">
-                      <a href={app.resume_link} target="_blank" rel="noreferrer" className="text-blue-600 underline">
+                      <a
+                        href={app.resume_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 underline"
+                      >
                         View Resume
                       </a>
                     </td>
-                    <td className="px-4 py-3 border capitalize">{app.reply_status}</td>
+                    <td className="px-4 py-3 border capitalize">
+                      <Select
+                        value={app.reply_status}
+                        onValueChange={(val) =>
+                          updateReplyStatus(app.id, val)
+                        }
+                      >
+                        <SelectTrigger className="w-[100px] h-9">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="replied">Replied</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </td>
                     <td className="px-4 py-3 border">{formatDate(app.created_at)}</td>
                   </tr>
                 ))}
@@ -162,7 +219,11 @@ const JobAppliedList: React.FC = () => {
           </div>
 
           <div className="flex justify-center items-center gap-4 mt-6">
-            <Button onClick={handlePrev} disabled={page === 1} variant="outline">
+            <Button
+              onClick={handlePrev}
+              disabled={page === 1}
+              variant="outline"
+            >
               Prev
             </Button>
             <span>

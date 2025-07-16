@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit } from "lucide-react";
+import {
+  GetCountries,
+  GetState,
+} from "react-country-state-city";
+import "react-country-state-city/dist/react-country-state-city.css";
 import {
   Table,
   TableBody,
@@ -19,7 +24,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner"; // for toast messages
+import { toast } from "sonner";
 import { API_BASE_URL } from "@/lib/api";
 
 interface User {
@@ -31,6 +36,7 @@ interface User {
   guide_code: string;
   created_at?: string;
   country?: string;
+  state?: string;
   is_email_verified: boolean;
   last_purchased_package: string;
   customer_image: string | null;
@@ -41,16 +47,30 @@ interface UserTableProps {
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
+  const [stateList, setStateList] = useState([]);
+  const [countryList, setCountryList] = useState([]);
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [editData, setEditData] = useState({ name: "", email: "", phone: "" });
+  const [editData, setEditData] = useState({ name: "", email: "", phone: "", state: "" });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const limit = 10;
+
+  useEffect(() => {
+    GetCountries().then((result) => {
+      setCountryList(result);
+      const india = result.find((c) => c.name === "India");
+      if (india) {
+        GetState(india.id).then((states) => {
+          setStateList(states);
+        });
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -88,6 +108,7 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
       name: `${user.first_name} ${user.last_name}`,
       email: user.email,
       phone: user.phone || "",
+      state: user.state || "",
     });
     setIsDialogOpen(true);
   };
@@ -118,12 +139,12 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
             last_name,
             email: editData.email,
             phone: editData.phone,
+            state: editData.state,
           }),
         }
       );
 
       const result = await response.json();
-      
 
       if (!response.ok) throw new Error(result.message || "Update failed");
 
@@ -136,6 +157,7 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
                 last_name,
                 email: editData.email,
                 phone: editData.phone,
+                state: editData.state,
               }
             : u
         )
@@ -170,6 +192,7 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
                 <TableHead>Guide Code</TableHead>
                 <TableHead>Phone</TableHead>
                 <TableHead>Join Date</TableHead>
+                <TableHead>State</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -207,6 +230,7 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
                       ? new Date(user.created_at).toLocaleDateString()
                       : "-"}
                   </TableCell>
+                  <TableCell>{user.state || "N/A"}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end space-x-2">
                       <Button
@@ -277,6 +301,24 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
                 value={editData.phone}
                 onChange={handleInputChange}
               />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">State</label>
+              <select
+                name="state"
+                value={editData.state}
+                onChange={(e) =>
+                  setEditData((prev) => ({ ...prev, state: e.target.value }))
+                }
+                className="w-full border px-3 py-2 rounded-md"
+              >
+                <option value="">Select State</option>
+                {stateList.map((state: any) => (
+                  <option key={state.id} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <DialogFooter>

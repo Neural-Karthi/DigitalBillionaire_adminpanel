@@ -43,10 +43,6 @@ export const Users: React.FC = () => {
             className="pl-10"
           />
         </div>
-        <Button variant="outline">
-          <Filter className="w-4 h-4 mr-2" />
-          Filter
-        </Button>
       </motion.div>
 
       <motion.div

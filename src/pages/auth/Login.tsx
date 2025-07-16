@@ -91,7 +91,7 @@ export const Login: React.FC = () => {
     setForgotSuccess("");
     setForgotLoading(true);
     try {
-      const res = await fetch(`${baseUrl}/api/auth/forgot-password`, {
+      const res = await fetch(`${baseUrl}/api/ForgetPassword`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: forgotEmail }),
@@ -117,7 +117,8 @@ export const Login: React.FC = () => {
     setForgotSuccess("");
     setForgotLoading(true);
     try {
-      const res = await fetch(`${baseUrl}/api/auth/verify-otp`, {
+      
+      const res = await fetch(`${baseUrl}/api/ForgetPassword/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: forgotEmail, otp: forgotOtp }),
@@ -147,12 +148,11 @@ export const Login: React.FC = () => {
     }
     setForgotLoading(true);
     try {
-      const res = await fetch(`${baseUrl}`, {
+      const res = await fetch(`${baseUrl}/api/ForgetPassword/Changepassword`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: forgotEmail,
-          otp: forgotOtp,
           password: forgotNewPassword,
         }),
       });

@@ -30,7 +30,6 @@ export const DashboardStats: React.FC = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch dashboard stats");
         }
-
         const data = await response.json();
         setstats(data);
       } catch (error) {

@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { NotificationProvider } from "@/context/NotificationContext";
-import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 import { AdminLayout } from "@/components/shared/AdminLayout";
 import { Login } from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
@@ -17,13 +16,31 @@ import { Coupons } from "@/pages/coupons/Coupons";
 import { Notifications } from "@/pages/Notifications";
 import NotFound from "./pages/NotFound";
 import Index from "./pages/products/index";
-import Kycpage from './pages/Kyc/KycIndex';
-import Freelanceindex from './pages/FreelanceHub/Freelanceindex'
+import Kycpage from "./pages/Kyc/KycIndex";
+import Freelanceindex from "./pages/FreelanceHub/Freelanceindex";
 import ContactUs from "./pages/contactus/contactus";
 import Jobindex from "./pages/JobApplied/Jobindex";
-import PaymentEnrollIndex from './pages/PaymentEnroll/PaymentEnrollIndex';
+import PaymentEnrollIndex from "./pages/PaymentEnroll/PaymentEnrollIndex";
+import React from "react";
 
 const queryClient = new QueryClient();
+
+// ✅ LocalStorage Role Guard
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const token = localStorage.getItem("admin_token");
+  const user = localStorage.getItem("admin_user");
+
+  if (!token || !user) return <Navigate to="/login" replace />;
+
+  try {
+    const parsed = JSON.parse(user);
+    if (parsed?.role !== "admin") return <Navigate to="/login" replace />;
+  } catch (err) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -37,6 +54,7 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
               <Route
                 path="/*"
                 element={
@@ -58,6 +76,7 @@ const App = () => (
                 <Route path="notifications" element={<Notifications />} />
                 <Route path="Payment_enroll" element={<PaymentEnrollIndex />} />
               </Route>
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
