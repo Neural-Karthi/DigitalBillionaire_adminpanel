@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
   const [forgotLoading, setForgotLoading] = useState(false);
   const [forgotError, setForgotError] = useState("");
   const [forgotSuccess, setForgotSuccess] = useState("");
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const baseUrl = import.meta.env.VITE_API_URL || "https://digitalbillionbackendcode-245452534397.europe-west1.run.app";
 
   if (user) {
     return <Navigate to="/dashboard" replace />;
