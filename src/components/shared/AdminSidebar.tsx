@@ -36,7 +36,7 @@ const navigation = [
   { name: 'Freelance Hub', href: '/Freelance_Hub', icon:ContactRound  },
   { name: 'Job Applied', href: '/Job_Applied', icon: BriefcaseBusiness },
   { name: 'Payment Enroll', href: '/Payment_enroll', icon: IndianRupee },
-  
+  { name: 'Webinar', href: '/webinar', icon: Radio },
 ];
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle }) => {

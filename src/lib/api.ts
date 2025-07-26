@@ -1,6 +1,5 @@
 // API configuration for admin panel
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "https://digitalbillionbackendcode-245452534397.europe-west1.run.app";
+export const API_BASE_URL = "https://digitalbillionbackendcode-245452534397.europe-west1.run.app";
 
 // Helper function to build API URLs
 export const buildApiUrl = (endpoint: string): string => {
