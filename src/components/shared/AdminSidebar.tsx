@@ -14,6 +14,7 @@ import {
   Menu,
   LogOut,
   Radio,
+  Megaphone,
   IndianRupee
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -37,6 +38,7 @@ const navigation = [
   { name: 'Job Applied', href: '/Job_Applied', icon: BriefcaseBusiness },
   { name: 'Payment Enroll', href: '/Payment_enroll', icon: IndianRupee },
   { name: 'Webinar', href: '/webinar', icon: Radio },
+  { name: 'Marketing Center', href: '/marketing-center', icon: Megaphone },
 ];
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onToggle }) => {

@@ -22,6 +22,8 @@ import ContactUs from "./pages/contactus/contactus";
 import Jobindex from "./pages/JobApplied/Jobindex";
 import PaymentEnrollIndex from "./pages/PaymentEnroll/PaymentEnrollIndex";
 import {Webinarindex} from './pages/webinar/Webinarindex';
+import {MarketingIndex} from './pages/MarketingCenter/MarketingIndex'
+
 import React from "react";
 
 const queryClient = new QueryClient();
@@ -77,6 +79,7 @@ const App = () => (
                 <Route path="notifications" element={<Notifications />} />
                 <Route path="Payment_enroll" element={<PaymentEnrollIndex />} />
                 <Route path="webinar" element={<Webinarindex />} />
+                <Route path="marketing-center" element={<MarketingIndex />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
