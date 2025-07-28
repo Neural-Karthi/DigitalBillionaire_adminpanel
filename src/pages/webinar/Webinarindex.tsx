@@ -1,9 +1,6 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, UserPlus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import WebinarTable from './Components/WebinarTable'
 export const Webinarindex: React.FC = () => {
 
