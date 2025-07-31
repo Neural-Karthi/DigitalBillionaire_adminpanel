@@ -31,7 +31,8 @@ const AddPromotionDialog: React.FC<CategoryMarketingProps> = ({ selectedata }) =
   const [videoTitle, setVideoTitle] = useState("");
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [mediaType, setMediaType] = useState<"video" | "image" | null>(null);
+  const [mediaType, setMediaType] = useState<"video" | "image" | "pdf"  | null>(null);
+
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [errors, setErrors] = useState({
     title: "",
@@ -55,14 +56,15 @@ const AddPromotionDialog: React.FC<CategoryMarketingProps> = ({ selectedata }) =
     const file = e.target.files?.[0];
     if (file) {
       if (type === "media") {
-        setMediaFile(file);
         setMediaType(
-          file.type.startsWith("video/")
-            ? "video"
-            : file.type.startsWith("image/")
-            ? "image"
-            : null
-        );
+  file.type.startsWith("video/")
+    ? "video"
+    : file.type.startsWith("image/")
+    ? "image"
+    : file.type === "application/pdf"
+    ? "pdf"
+    : null
+);
       } else {
         setThumbnail(file);
       }
@@ -257,11 +259,12 @@ const AddPromotionDialog: React.FC<CategoryMarketingProps> = ({ selectedata }) =
             <div className="space-y-2">
               <Label htmlFor="media">Media (Video/Image)</Label>
               <Input
-                id="media"
-                type="file"
-                accept="video/*,image/*"
-                onChange={(e) => handleFileChange(e, "media")}
-              />
+  id="media"
+  type="file"
+  accept="video/*,image/*,application/pdf"
+  onChange={(e) => handleFileChange(e, "media")}
+/>
+
               {errors.media && <p className="text-red-500 text-sm">{errors.media}</p>}
             </div>
 
