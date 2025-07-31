@@ -50,26 +50,28 @@ const AddPromotionDialog: React.FC<CategoryMarketingProps> = ({ selectedata }) =
   const [totalPages, setTotalPages] = useState(1);
 
   const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: "media" | "thumbnail"
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (type === "media") {
-        setMediaType(
-  file.type.startsWith("video/")
-    ? "video"
-    : file.type.startsWith("image/")
-    ? "image"
-    : file.type === "application/pdf"
-    ? "pdf"
-    : null
-);
-      } else {
-        setThumbnail(file);
-      }
-    }
-  };
+  e: React.ChangeEvent<HTMLInputElement>,
+  type: "media" | "thumbnail"
+) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (type === "media") {
+    setMediaType(
+      file.type.startsWith("video/")
+        ? "video"
+        : file.type.startsWith("image/")
+        ? "image"
+        : file.type === "application/pdf"
+        ? "pdf"
+        : null
+    );
+    setMediaFile(file); // <-- IMPORTANT: Set the actual media file
+  } else {
+    setThumbnail(file);
+  }
+};
+
 
   const validateForm = () => {
     const newErrors = {
