@@ -57,7 +57,7 @@ export const WebinarTable = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("admin_token");
-      const res = await fetch(`${API_BASE_URL}/api/Admin/GetWebinars`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/admin/Webinar/GetWebinars`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -121,7 +121,7 @@ export const WebinarTable = () => {
     setIsDeleting(true);
     try {
       const token = localStorage.getItem("admin_token");
-      const res = await fetch(`${API_BASE_URL}/api/Admin/DeleteWebinar/${webinarToDelete.id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/admin/Webinar/DeleteWebinar/${webinarToDelete.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -153,7 +153,7 @@ export const WebinarTable = () => {
     formData.append("timingFrom", webinarData.timingFrom);
     formData.append("timingTo", webinarData.timingTo);
 
-    const endpoint = `${API_BASE_URL}/api/Admin/AddWebinar`;
+    const endpoint = `${API_BASE_URL}/api/v1/admin/Webinar/AddWebinar`;
 
     const submitForm = async (base64Image = null) => {
       if (base64Image) {
@@ -202,7 +202,7 @@ export const WebinarTable = () => {
     formData.append("timingFrom", webinarData.timingFrom);
     formData.append("timingTo", webinarData.timingTo);
 
-    const endpoint = `${API_BASE_URL}/api/Admin/UpdateWebinar`;
+    const endpoint = `${API_BASE_URL}/api/v1/admin/Webinar/UpdateWebinar`;
 
     const submitForm = async (base64Image = null) => {
       if (base64Image) {

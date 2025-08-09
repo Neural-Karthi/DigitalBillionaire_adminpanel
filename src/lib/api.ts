@@ -9,11 +9,11 @@ export const buildApiUrl = (endpoint: string): string => {
 // Common API endpoints for admin
 export const API_ENDPOINTS = {
   // Auth
-  ADMIN_LOGIN: "/api/Admin/login",
+  ADMIN_LOGIN: "/api/v1/admin/login",
   ADMIN_REGISTER: "/api/admin/register",
 
   // Dashboard
-  DASHBOARD_STATS: "/api/Admin/dashboardstatics",
+  DASHBOARD_STATS: "/api/v1/admin/dashboard/statics",
 
   // Products
   PRODUCTS: "/api/products",

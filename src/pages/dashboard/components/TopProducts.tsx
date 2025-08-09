@@ -20,7 +20,7 @@ export const TopProducts: React.FC = () => {
       try {
         const token = localStorage.getItem("admin_token");
         const response = await fetch(
-          `${API_BASE_URL}/api/Admin/Topboard`,
+          `${API_BASE_URL}/api/v1/admin/dashboard/Topboard`,
           {
             headers: {
               "Content-Type": "application/json",

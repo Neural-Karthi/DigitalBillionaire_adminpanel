@@ -23,8 +23,9 @@ import Jobindex from "./pages/JobApplied/Jobindex";
 import PaymentEnrollIndex from "./pages/PaymentEnroll/PaymentEnrollIndex";
 import {Webinarindex} from './pages/webinar/Webinarindex';
 import {MarketingIndex} from './pages/MarketingCenter/MarketingIndex'
-
+import Fundaccount from "./pages/FundAccount/Fundaccount";
 import React from "react";
+import { Rollout_index } from "./pages/Rollout_payment/Rollout_index";
 
 const queryClient = new QueryClient();
 
@@ -58,14 +59,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-              <Route
-                path="/*"
-                element={
-                  <ProtectedRoute>
-                    <AdminLayout />
-                  </ProtectedRoute>
-                }
-              >
+              <Route  path="/*"  element={ <ProtectedRoute> <AdminLayout /> </ProtectedRoute> }>
                 <Route index element={<Navigate to="/dashboard" replace />} />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="products" element={<Index />} />
@@ -76,10 +70,11 @@ const App = () => (
                 <Route path="orders" element={<Orders />} />
                 <Route path="users" element={<Users />} />
                 <Route path="coupons" element={<Coupons />} />
-                <Route path="notifications" element={<Notifications />} />
                 <Route path="Payment_enroll" element={<PaymentEnrollIndex />} />
                 <Route path="webinar" element={<Webinarindex />} />
                 <Route path="marketing-center" element={<MarketingIndex />} />
+                <Route path="Fund_account" element={<Fundaccount />} />
+                <Route path="Rollout_Payout" element={<Rollout_index />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

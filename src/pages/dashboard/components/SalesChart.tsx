@@ -18,7 +18,7 @@ export const SalesChart: React.FC = () => {
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/Admin/Salesoverview`);
+        const res = await fetch(`${API_BASE_URL}/api/v1/admin/dashboard/Salesoverview`);
         const data = await res.json();
         setChartData(data);
       } catch (err) {

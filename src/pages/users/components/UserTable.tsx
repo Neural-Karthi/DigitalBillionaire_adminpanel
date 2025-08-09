@@ -79,7 +79,7 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
       try {
         const token = localStorage.getItem("admin_token");
         const res = await fetch(
-          `${API_BASE_URL}/api/Admin/GetCustomerInfo?page=${page}&limit=${limit}&search=${searchTerm}`,
+          `${API_BASE_URL}/api/v1/admin/users/UserInfo?page=${page}&limit=${limit}&search=${searchTerm}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -126,7 +126,7 @@ export const UserTable: React.FC<UserTableProps> = ({ searchTerm }) => {
     try {
       const token = localStorage.getItem("admin_token");
       const response = await fetch(
-        `${API_BASE_URL}/api/Admin/UpdateCustomerprofile`,
+        `${API_BASE_URL}/api/v1/admin/users/UpdateCustomerprofile`,
         {
           method: "PUT",
           headers: {

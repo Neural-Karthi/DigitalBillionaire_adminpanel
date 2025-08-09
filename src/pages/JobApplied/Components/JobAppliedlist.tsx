@@ -52,7 +52,7 @@ const JobAppliedList: React.FC = () => {
       }
 
       const res = await fetch(
-        `${API_BASE_URL}/api/Admin/GetJobappliedlist?${params.toString()}`
+        `${API_BASE_URL}/api/v1/admin/Application/GetJobappliedlist?${params.toString()}`
       );
       const data = await res.json();
       setApplications(data.results || []);
@@ -71,7 +71,7 @@ const JobAppliedList: React.FC = () => {
   const updateReplyStatus = async (id: string, newStatus: string) => {
     try {
       const res = await fetch(
-        `${API_BASE_URL}/api/Admin/GetJobappliedlist/update-status`,
+        `${API_BASE_URL}/api/v1/admin/Application/GetJobappliedlist/update-status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

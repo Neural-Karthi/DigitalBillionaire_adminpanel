@@ -43,7 +43,7 @@ export const MarketingIndex = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/Admin/get-categories`);
+        const response = await axios.get(`${API_BASE_URL}/api/v1/admin/PromotionalMaterial/get-categories`);
         setCategoryList(response.data?.categories || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -65,7 +65,7 @@ export const MarketingIndex = () => {
     setFormError("");
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/Admin/add-category`, {
+      const response = await axios.post(`${API_BASE_URL}/api/v1/admin/PromotionalMaterial/add-category`, {
         name: categoryName.trim(),
       });
       const newCategory = response.data?.category ?? response.data;
@@ -85,7 +85,7 @@ export const MarketingIndex = () => {
 
     setIsDeleting(true);
     try {
-      await axios.delete(`${API_BASE_URL}/api/Admin/delete-category/${categoryToDelete.id}`);
+      await axios.delete(`${API_BASE_URL}/api/v1/admin/PromotionalMaterial/delete-category/${categoryToDelete.id}`);
       setCategoryList((prev) => prev.filter((cat) => cat.id !== categoryToDelete.id));
       setDeleteConfirmDialog(false);
       setCategoryToDelete(null);

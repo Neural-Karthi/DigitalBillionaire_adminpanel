@@ -110,7 +110,7 @@ const AddPromotionDialog: React.FC<CategoryMarketingProps> = ({ selectedata }) =
 
       setUploadProgress(0);
 
-      await axios.post(`${API_BASE_URL}/api/Admin/upload-promotion`, formData, {
+      await axios.post(`${API_BASE_URL}/api/v1/admin/PromotionalMaterial/upload-promotion`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -140,7 +140,7 @@ const AddPromotionDialog: React.FC<CategoryMarketingProps> = ({ selectedata }) =
   const handleDelete = async () => {
     if (!videoToDelete) return;
     try {
-      await axios.delete(`${API_BASE_URL}/api/Admin/delete-promotion/${videoToDelete}`);
+      await axios.delete(`${API_BASE_URL}/api/v1/admin/PromotionalMaterial/delete-promotion/${videoToDelete}`);
       setDeleteDialogOpen(false);
       setVideoToDelete(null);
       fetchdetails(page); // Refresh same page after deletion
@@ -152,7 +152,7 @@ const AddPromotionDialog: React.FC<CategoryMarketingProps> = ({ selectedata }) =
   const fetchdetails = async (currentPage = page) => {
     try {
       const res = await fetch(
-        `${API_BASE_URL}/api/Admin/promotional_videos/${selectedata}?page=${currentPage}&limit=${limit}`
+        `${API_BASE_URL}/api/v1/admin/PromotionalMaterial/promotional_videos/${selectedata}?page=${currentPage}&limit=${limit}`
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to fetch");

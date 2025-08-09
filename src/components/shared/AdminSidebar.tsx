@@ -28,15 +28,16 @@ interface AdminSidebarProps {
 // { name: 'Payment', href: '/products', icon: Package },
 // { name: 'Coupons', href: '/coupons', icon: Tag  },
 // { name: 'Webinars', href: '/Webinars', icon: Radio },
-
+//  { name: 'Payment Enroll', href: '/Payment_enroll', icon: IndianRupee },
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Users', href: '/users', icon: Users },
-  { name: 'KYC Pendings', href: '/Kyc', icon: BadgeAlert }, 
+  { name: 'Fund Account', href: '/Fund_account', icon: Tag }, 
   { name: 'Contact Us', href: '/Contactus', icon: Headset },
   { name: 'Freelance Hub', href: '/Freelance_Hub', icon:ContactRound  },
   { name: 'Job Applied', href: '/Job_Applied', icon: BriefcaseBusiness },
-  { name: 'Payment Enroll', href: '/Payment_enroll', icon: IndianRupee },
+  { name: 'Rollout Payout', href: '/Rollout_Payout', icon: IndianRupee },
+ 
   { name: 'Webinar', href: '/webinar', icon: Radio },
   { name: 'Marketing Center', href: '/marketing-center', icon: Megaphone },
 ];

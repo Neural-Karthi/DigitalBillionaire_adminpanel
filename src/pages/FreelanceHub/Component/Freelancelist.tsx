@@ -52,7 +52,7 @@ const FreelanceApplicationsList: React.FC = () => {
       }
 
       const res = await fetch(
-        `${API_BASE_URL}/api/Admin/GetFreelanceList?${params.toString()}`
+        `${API_BASE_URL}/api/v1/admin/Application/GetFreelanceList?${params.toString()}`
       );
       const data = await res.json();
       setApplications(data.results || []);
@@ -71,7 +71,7 @@ const FreelanceApplicationsList: React.FC = () => {
   const updateReplyStatus = async (id: string, newStatus: string) => {
     try {
       const res = await fetch(
-        `${API_BASE_URL}/api/Admin/GetFreelanceList/update-status`,
+        `${API_BASE_URL}/api/v1/admin/Application/GetFreelanceList/update-status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

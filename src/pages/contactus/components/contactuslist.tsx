@@ -49,7 +49,7 @@ const Contactuslist: React.FC = () => {
       }
 
       const res = await fetch(
-        `${API_BASE_URL}/api/Admin/GetContactuslist?${params.toString()}`
+        `${API_BASE_URL}/api/v1/admin/GetContactuslist?${params.toString()}`
       );
       const data = await res.json();
       setInquiries(data.results || []);
