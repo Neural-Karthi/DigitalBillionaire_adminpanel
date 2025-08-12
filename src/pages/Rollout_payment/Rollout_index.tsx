@@ -77,6 +77,50 @@ const handleConfirm = async () => {
 };
 
 
+const [otp, setOtp] = useState("");
+
+
+const [otpDialogOpen, setOtpDialogOpen] = useState(false);
+
+const handleSendOtp = async () => {
+  setfechingloader(true);
+  try {
+    const res = await axios.post(`${API_BASE_URL}/api/v_1/users/PayoutSendOtp`);
+    if (res.data.success) {
+      toast.info("📧 OTP sent to admin email");
+      setOtpDialogOpen(true);
+    } else {
+      toast.error(res.data.message || "Failed to send OTP");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Server error while sending OTP");
+  } finally {
+    setfechingloader(false);
+  }
+};
+
+const handleVerifyOtpAndPayout = async () => {
+  setfechingloader(true);
+  try {
+    const verifyRes = await axios.post(`${API_BASE_URL}/api/v_1/users/PayoutVerifyOtp`, { otp });
+
+    if (!verifyRes.data.success) {
+      toast.error(verifyRes.data.message || "OTP verification failed");
+      return;
+    }
+
+    setOtpDialogOpen(false); // close OTP dialog
+    await handleConfirm(); // proceed to payout
+  } catch (error) {
+    console.error(error);
+    toast.error("Server error during OTP verification");
+  } finally {
+    setfechingloader(false);
+  }
+};
+
+
 const handleCancel = () => {
   setDialogOpen(false);
 };
@@ -166,6 +210,42 @@ useEffect(() => {
         <Enrollmenttable searchTerm={searchTerm} />
       </motion.div>
 
+
+
+
+<Dialog open={otpDialogOpen} onOpenChange={setOtpDialogOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Enter OTP</DialogTitle>
+      <DialogDescription>
+        Please enter the OTP sent to the admin email.
+      </DialogDescription>
+    </DialogHeader>
+
+    <Input
+      type="text"
+      value={otp}
+      onChange={(e) => setOtp(e.target.value)}
+      placeholder="Enter OTP"
+    />
+
+    <DialogFooter>
+      <Button variant="ghost" onClick={() => setOtpDialogOpen(false)}>
+        Cancel
+      </Button>
+      <Button onClick={handleVerifyOtpAndPayout} disabled={fetchinloader}>
+        {fetchinloader && (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        )}
+        {fetchinloader ? "Verifying..." : "Verify & Process Payout"}
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+
+
+
       {summaryData && (
   <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
     <DialogContent>
@@ -198,31 +278,32 @@ useEffect(() => {
          <Button variant="ghost" onClick={handleCancel}>
            Cancel
          </Button>
-         <Button onClick={handleConfirm} disabled={fetchinloader}>
-           {fetchinloader ? (
-             <svg
-               className="animate-spin h-5 w-5 mr-2 text-white inline-block"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 24 24"
-             >
-               <circle
-                 className="opacity-25"
-                 cx="12"
-                 cy="12"
-                 r="10"
-                 stroke="currentColor"
-                 strokeWidth="4"
-               ></circle>
-               <path
-                 className="opacity-75"
-                 fill="currentColor"
-                 d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-               ></path>
-             </svg>
-           ) : null}
-           {fetchinloader ? "Processing..." : "Confirm"}
-         </Button>
+         <Button onClick={handleSendOtp} disabled={fetchinloader}>
+  {fetchinloader ? (
+    <svg
+      className="animate-spin h-5 w-5 mr-2 text-white inline-block"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+      ></path>
+    </svg>
+  ) : null}
+  {fetchinloader ? "Sending OTP..." : "Confirm"}
+</Button>
+
       </DialogFooter>
     </DialogContent>
   </Dialog>

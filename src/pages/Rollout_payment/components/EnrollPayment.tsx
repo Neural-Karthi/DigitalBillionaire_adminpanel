@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "@/lib/api";
 
 interface User {
