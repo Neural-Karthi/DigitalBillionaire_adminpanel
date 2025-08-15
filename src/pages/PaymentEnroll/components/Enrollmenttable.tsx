@@ -65,7 +65,7 @@ useEffect(() => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/Admin/GetInprocessPayments`);
       const data = await response.json();
-
+      console.log(data)
       if (data.session) {
         setOpenSession(data.session);
         setSession(false);

@@ -36,14 +36,26 @@ export const Rollout_index: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
 
+const [emptyPayoutDialogOpen, setEmptyPayoutDialogOpen] = useState(false);
+
 const handleProcessClick = async () => {
   try {
     setfechingloader(true);
     const response = await axios.get(`${API_BASE_URL}/api/Admin/get-full-payroll-preview`);
-    setSummaryData(response.data.summary);
-    setDialogOpen(true);
+    const summary = response.data.summary;
+
+    if (!summary || summary.total_count === 0 || summary.total_amount === 0) {
+      // Show "no pending payouts" dialog
+      setSummaryData(summary);
+      setEmptyPayoutDialogOpen(true);
+    } else {
+      // Show normal summary dialog
+      setSummaryData(summary);
+      setDialogOpen(true);
+    }
   } catch (error) {
     console.error(error);
+    toast.error("Failed to fetch payroll preview");
   } finally {
     setfechingloader(false);
   }
@@ -244,6 +256,28 @@ useEffect(() => {
 </Dialog>
 
 
+<Dialog open={emptyPayoutDialogOpen} onOpenChange={setEmptyPayoutDialogOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>No Pending Payouts</DialogTitle>
+      <DialogDescription>
+        Admin, you have cleared all pending payouts from <br />
+        {summaryData?.payout_period?.start
+          ? new Date(summaryData.payout_period.start).toLocaleDateString()
+          : "start"}{" "}
+        to{" "}
+        {summaryData?.payout_period?.end
+          ? new Date(summaryData.payout_period.end).toLocaleDateString()
+          : "end"}
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <Button variant="default" onClick={() => setEmptyPayoutDialogOpen(false)}>
+        Close
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
 
 
       {summaryData && (
