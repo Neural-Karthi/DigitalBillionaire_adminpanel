@@ -8,39 +8,49 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api";
 
-export const DashboardStats: React.FC = () => {
+// Define props type
+interface DashboardStatsProps {
+  filter: string;
+}
+
+// Use the props type in your component
+export const DashboardStats: React.FC<DashboardStatsProps> = ({ filter }) => {
   const [stats, setstats] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const token = localStorage.getItem("admin_token");
-        const response = await fetch(
-          `${API_BASE_URL}${API_ENDPOINTS.DASHBOARD_STATS}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+useEffect(() => {
+  const fetchStats = async () => {
+    setLoading(true); // 👈 show loader every time filter changes
+    try {
+      const token = localStorage.getItem("admin_token");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch dashboard stats");
+      const response = await fetch(
+        `${API_BASE_URL}${API_ENDPOINTS.DASHBOARD_STATS}?filter=${filter}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-        const data = await response.json();
-        setstats(data);
-      } catch (error) {
-        // No console.error statements
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
-    fetchStats();
-  }, []);
+      if (!response.ok) {
+        throw new Error("Failed to fetch dashboard stats");
+      }
+
+      const data = await response.json();
+      setstats(data);
+    } catch (error) {
+      // handle gracefully (e.g., toast notification)
+    } finally {
+      setLoading(false); // 👈 hide loader after fetch completes
+    }
+  };
+
+  fetchStats();
+}, [filter]);
+
 
   const handleCardClick = (route: string | null) => {
     if (route) {
@@ -69,7 +79,7 @@ export const DashboardStats: React.FC = () => {
                     ? "cursor-pointer hover:shadow-lg transition-shadow duration-200"
                     : ""
                 }`}
-                onClick={() => handleCardClick(stat.route)}
+
               >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium text-gray-600">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/api";
 
 interface Product {
   _id: string;
@@ -9,18 +9,25 @@ interface Product {
   price: number;
   soldCount: number;
   category: string;
+  sales: number;
+  revenue: number;
 }
 
-export const TopProducts: React.FC = () => {
+interface TopProductsProps {
+  filter: string; // 🔹 filter prop
+}
+
+export const TopProducts: React.FC<TopProductsProps> = ({ filter }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTopProducts = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem("admin_token");
         const response = await fetch(
-          `${API_BASE_URL}/api/v1/admin/dashboard/Topboard`,
+          `${API_BASE_URL}/api/v1/admin/dashboard/Topboard?filter=${filter}`, // 🔹 pass filter as query param
           {
             headers: {
               "Content-Type": "application/json",
@@ -43,26 +50,11 @@ export const TopProducts: React.FC = () => {
     };
 
     fetchTopProducts();
-  }, []);
+  }, [filter]); // 🔹 refetch whenever filter changes
 
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat("en-IN").format(num);
   };
-
-  const getTopProductsWithRealData = () => {
-    return products.map((product, index) => {
-      const revenue = product.price * product.soldCount;
-      return {
-    id: product?._id,
-        name: product?.name,
-        sales: product?.sales,
-        revenue: product?.revenue,
-        trend: "up", 
-      };
-    });
-  };
-
-  const currentTopProducts = getTopProductsWithRealData();
 
   return (
     <Card>
@@ -93,10 +85,10 @@ export const TopProducts: React.FC = () => {
                 </div>
               ))}
             </div>
-          ) : currentTopProducts.length > 0 ? (
-            currentTopProducts.map((product, index) => (
+          ) : products.length > 0 ? (
+            products.map((product, index) => (
               <div
-                key={product.id}
+                key={product._id}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
               >
                 <div className="flex items-center space-x-3">
@@ -113,12 +105,14 @@ export const TopProducts: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium text-gray-900">{product.revenue}</p>
+                  <p className="font-medium text-gray-900">
+                    {formatNumber(product.revenue)}
+                  </p>
                   <Badge
-                    variant={product.trend === "up" ? "default" : "secondary"}
+                    variant={product.revenue >= 0 ? "default" : "secondary"}
                     className="text-xs"
                   >
-                    {product.trend === "up" ? "↗" : "↘"}
+                    {product.revenue >= 0 ? "↗" : "↘"}
                   </Badge>
                 </div>
               </div>

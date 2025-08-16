@@ -4,14 +4,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
-import { NotificationProvider } from "@/context/NotificationContext";
+
 import { AdminLayout } from "@/components/shared/AdminLayout";
 import { Login } from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import { Dashboard } from "@/pages/dashboard/Dashboard";
-import { Products } from "@/pages/products/Products";
-import { Orders } from "@/pages/orders/Orders";
-import { Users } from "@/pages/users/Users";
+
+import { Users } from "@/pages/users/Users"
+
 import { Coupons } from "@/pages/coupons/Coupons";
 import { Notifications } from "@/pages/Notifications";
 import NotFound from "./pages/NotFound";
@@ -52,7 +52,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
-        <NotificationProvider>
+       
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -67,7 +67,6 @@ const App = () => (
                 <Route path="Freelance_Hub" element={<Freelanceindex />} />
                 <Route path="ContactUs" element={<ContactUs />} />
                 <Route path="Job_Applied" element={<Jobindex />} />
-                <Route path="orders" element={<Orders />} />
                 <Route path="users" element={<Users />} />
                 <Route path="coupons" element={<Coupons />} />
                 <Route path="Payment_enroll" element={<PaymentEnrollIndex />} />
@@ -80,7 +79,6 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-        </NotificationProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   AreaChart,
   Area,
@@ -8,28 +8,36 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from 'recharts';
+} from "recharts";
 import { API_BASE_URL } from "@/lib/api";
 
-export const SalesChart: React.FC = () => {
-  const [chartData, setChartData] = useState([]);
+interface SalesChartProps {
+  filter: string;
+}
+
+export const SalesChart: React.FC<SalesChartProps> = ({ filter }) => {
+  const [chartData, setChartData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSalesData = async () => {
+      setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/admin/dashboard/Salesoverview`);
+        const res = await fetch(
+          `${API_BASE_URL}/api/v1/admin/dashboard/Salesoverview?filter=${filter}`
+        );
         const data = await res.json();
         setChartData(data);
       } catch (err) {
-        console.error('Failed to load sales chart:', err);
+        console.error("Failed to load sales chart:", err);
+        setChartData([]); // fallback empty
       } finally {
         setLoading(false);
       }
     };
 
     fetchSalesData();
-  }, []);
+  }, [filter]); // 🔹 refetch whenever filter changes
 
   return (
     <Card>
