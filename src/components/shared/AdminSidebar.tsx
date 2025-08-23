@@ -32,6 +32,7 @@ interface AdminSidebarProps {
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Users', href: '/users', icon: Users },
+  { name: 'Course Manage', href: '/Course_Manage', icon: Package },
   { name: 'Fund Account', href: '/Fund_account', icon: Tag }, 
   { name: 'Contact Us', href: '/Contactus', icon: Headset },
   { name: 'Freelance Hub', href: '/Freelance_Hub', icon:ContactRound  },
