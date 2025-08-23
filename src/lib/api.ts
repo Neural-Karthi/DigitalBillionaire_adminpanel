@@ -1,5 +1,5 @@
 // API configuration for admin panel
-export const API_BASE_URL = "http://localhost:8000";
+export const API_BASE_URL = "https://digitalbillionbackendcode-245452534397.europe-west1.run.app";
 
 // Helper function to build API URLs
 export const buildApiUrl = (endpoint: string): string => {
